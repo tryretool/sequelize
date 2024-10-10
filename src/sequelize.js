@@ -142,6 +142,7 @@ class Sequelize {
    * @param {string}   [options.username=null] The username which is used to authenticate against the database.
    * @param {string}   [options.password=null] The password which is used to authenticate against the database.
    * @param {string}   [options.database=null] The name of the database.
+   * @param {string}   [options.principak=null] The GSSAPI principal of the database (specification of this field overrides username and password fields). Currently only used by postgres.
    * @param {string}   [options.dialect] The dialect of the database you are connecting to. One of mysql, postgres, sqlite, db2, mariadb and mssql.
    * @param {string}   [options.dialectModule=null] If specified, use this dialect library. For example, if you want to use pg.js instead of pg when connecting to a pg database, you should specify 'require("pg.js")' here
    * @param {string}   [options.dialectModulePath=null] If specified, load the dialect library from this path. For example, if you want to use pg.js instead of pg when connecting to a pg database, you should specify '/path/to/pg.js' here
@@ -188,7 +189,7 @@ class Sequelize {
     if (arguments.length === 1 && typeof database === 'object') {
       // new Sequelize({ ... options })
       options = database;
-      config = _.pick(options, 'host', 'port', 'database', 'username', 'password');
+      config = _.pick(options, 'host', 'port', 'database', 'username', 'password', 'principal');
     } else if (arguments.length === 1 && typeof database === 'string' || arguments.length === 2 && typeof username === 'object') {
       // new Sequelize(URI, { ... options })
 
@@ -320,6 +321,7 @@ class Sequelize {
       database: config.database || this.options.database,
       username: config.username || this.options.username,
       password: config.password || this.options.password || null,
+      principal: config.principal || null,
       host: config.host || this.options.host,
       port: config.port || this.options.port,
       pool: this.options.pool,

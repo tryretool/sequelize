@@ -85,9 +85,17 @@ class ConnectionManager extends AbstractConnectionManager {
 
   async connect(config) {
     config.user = config.username;
-    const connectionConfig = _.pick(config, [
-      'user', 'password', 'host', 'database', 'port'
-    ]);
+
+    let connectionConfig = {}
+    if (config.principal) {
+      connectionConfig = _.pick(config, [
+        'principal', 'host', 'database', 'port'
+      ]);
+    } else {
+      connectionConfig = _.pick(config, [
+        'user', 'password', 'host', 'database', 'port'
+      ]);
+    }
 
     connectionConfig.types = {
       getTypeParser: ConnectionManager.prototype.getTypeParser.bind(this)
